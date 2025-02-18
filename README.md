@@ -1,7 +1,7 @@
 # Proyecto_ETL_Hoteles
 
 ## 📖 Descripción
-Análisis base hoteles 
+Nuestra empresa se dedica al sector hotelero en Madrid. Se nos ha proporcionado un archivo en formato Parquet que contiene información sobre reservas de hoteles, incluyendo datos de hoteles propios y de la competencia. Nuestro objetivo es extraer, transformar y cargar (ETL) estos datos para generar insights relevantes. 
 
 ## 🗂️ Estructura del Proyecto
 
@@ -14,13 +14,15 @@ Análisis base hoteles
   
 ## 🛠️ Instalación y Requisitos
     
-Este proyecto usa Python 3.8 y requiere las siguientes bibliotecas:
+Este proyecto usa Python y requiere las siguientes librerias:
 
 - pandas
 - numpy
 - matplotlib
 - seaborn
 - psycopg2
+- beautifulsoup
+- requests
 
 ## 📊 Resultados y Conclusiones
 
