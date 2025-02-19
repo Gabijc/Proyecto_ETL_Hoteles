@@ -23,6 +23,7 @@ def info_df(dataframe):
 
     return info_df
 
+
 # Creamos una función que nos modifica el tipo de dato de las columnas que le pasemos a tipo fecha
 def data_fechas(dataframe, columnas):
     """
@@ -39,6 +40,21 @@ def data_fechas(dataframe, columnas):
         dataframe[col] = pd.to_datetime(dataframe[col])
     return dataframe
 
+# Creamos una funcion que nos modifica los indices de las columnas que le pasemos, en este caso el de id de hotel e id de cliente
+def cambio_id(dataframe, lista_columnas):
+    
+    lista = dataframe[lista_columnas[0]].unique()
+    diccionario = {}
+    conteo = 1
+    for elemento in lista:
+        if elemento == '':
+            diccionario[elemento] = np.nan
+        else:
+            diccionario[elemento] = conteo
+            conteo += 1
+
+    dataframe[lista_columnas[1]] = dataframe[lista_columnas[0]].map(diccionario).astype("Int64")
+    return dataframe
 
 # Creamos una función que realiza las mismas funciones que el describe, pero con más estadísticos, solo para elementos numéricos
 def estadisticos_numericas_df(dataframe, lista_columnas):
