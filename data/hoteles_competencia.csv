@@ -1,11 +1,11 @@
-nombre,rating
-ibis Styles Madrid Prado,"4,7"
-ibis budget Madrid Centro Lavapies,"4,3"
-ibis Styles Madrid Centro Maravillas,"4,7"
-ibis budget Madrid Calle 30,"4,3"
-ibis Madrid Centro las Ventas,"4,5"
-ibis budget Madrid Centro las Ventas,"4,3"
-ibis Styles Madrid City Las Ventas,"4,6"
-ibis budget Madrid Calle Alcalá,"4,3"
-ibis Madrid Calle Alcalá,"4,5"
-ibis budget Madrid Vallecas,"4,2"
+nombre,estrellas,precio
+ibis Styles Madrid Prado,3,170
+ibis Madrid Centro las Ventas,2,172
+ibis budget Madrid Vallecas,1,95
+ibis Madrid Aeropuerto Barajas,2,116
+ibis Madrid Alcorcon Tresaguas,2,90
+ibis budget Madrid Aeropuerto,1,97
+ibis Madrid Alcobendas,2,84
+ibis budget Madrid Alcorcon Móstoles,2,77
+ibis Madrid Fuenlabrada,2,86
+ibis Madrid Alcala de Henares La Garena,3,83
