@@ -1,11 +1,11 @@
-nombre,estrellas,precio
-ibis Styles Madrid Prado,3,170.0
-ibis Madrid Centro las Ventas,2,172.0
-ibis budget Madrid Vallecas,1,95.0
-ibis Madrid Aeropuerto Barajas,2,116.0
-ibis Madrid Alcorcon Tresaguas,2,90.0
-ibis budget Madrid Aeropuerto,1,97.0
-ibis Madrid Alcobendas,2,84.0
-ibis budget Madrid Alcorcon Móstoles,2,77.0
-ibis Madrid Fuenlabrada,2,86.0
-ibis Madrid Alcala de Henares La Garena,3,83.0
+nombre,estrellas,precio,fecha_reserva
+ibis Styles Madrid Prado,4.7,170.0,2025-02-19
+ibis budget Madrid Calle 30,4.4,106.0,2025-02-19
+ibis Madrid Centro las Ventas,4.5,172.0,2025-02-19
+ibis budget Madrid Centro las Ventas,4.3,119.0,2025-02-19
+ibis budget Madrid Vallecas,4.3,102.0,2025-02-19
+ibis Madrid Aeropuerto Barajas,4.4,116.0,2025-02-19
+ibis Madrid Alcorcon Tresaguas,4.4,90.0,2025-02-19
+ibis budget Madrid Aeropuerto,4.0,97.0,2025-02-19
+ibis Madrid Alcobendas,4.4,84.0,2025-02-19
+ibis budget Madrid Alcorcon Móstoles,4.5,77.0,2025-02-19
