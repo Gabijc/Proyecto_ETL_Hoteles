@@ -1,4 +1,4 @@
-nombre_hotel,valoracion,precio,fecha_reserva
+nombre_hotel,estrellas,precio,fecha_reserva
 ibis Styles Madrid Prado,4.7,161.0,2025-02-21
 ibis budget Madrid Calle 30,4.4,110.0,2025-02-21
 ibis Madrid Centro las Ventas,4.5,172.0,2025-02-21
