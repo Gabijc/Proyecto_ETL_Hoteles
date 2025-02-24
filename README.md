@@ -14,22 +14,28 @@ Nuestra empresa se dedica al sector hotelero en Madrid. Se nos ha proporcionado 
   
 ## 🛠️ Instalación y Requisitos
     
-Este proyecto usa Python y requiere las siguientes librerias:
+Este proyecto usa Python y SQL, y requiere las siguientes librerias:
 
 - pandas
 - numpy
 - matplotlib
 - seaborn
 - psycopg2
-- beautifulsoup
 - requests
+- selenium
+- time 
+- webdriver-manager
 
 ## 📊 Resultados y Conclusiones
 
+Los hoteles del grupo han obtenido una recaudación superior a los de la competencia, además de tener unos precios medios superiores. Sin embargo la valoración media de los hoteles es inferior.
+
 ## 🔄 Próximos Pasos
-- Saber que clientes han asistido a que eventos para analizar el impacto de los eventos en las reservas
+- Obtener información sobre la asistencia de los clientes a los eventos en las fechas de estancia
 
 ## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Si deseas mejorar el proyecto, por favor abre un pull request o una issue
 
 ## ✒️ Autores
 **Gabriela Jiménez Conde** - [gabrielajimenezconde@gmail.com](https://github.com/Gabijc)
