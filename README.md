@@ -31,7 +31,8 @@ Este proyecto usa Python y SQL, y requiere las siguientes librerias:
 Los hoteles del grupo han obtenido una recaudación superior a los de la competencia, además de tener unos precios medios superiores. Sin embargo la valoración media de los hoteles es inferior.
 
 ## 🔄 Próximos Pasos
-- Obtener información sobre la asistencia de los clientes a los eventos en las fechas de estancia
+- Obtener información sobre la asistencia de los clientes a los eventos en las fechas de estancia.
+- Crear flujos de trabajo para que cada mes se proporcione un informe similar al obtenido en este proyecto, lo que incluiría realizar scrapeos de la competencia, así como consultas a la API de forma regular.
 
 ## 🤝 Contribuciones
 

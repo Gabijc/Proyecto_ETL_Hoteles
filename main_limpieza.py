@@ -3,10 +3,48 @@ import numpy as np
 from src.soporte_limpieza import info_df, data_fechas, cambio_id
 
 
-df_raw = pd.read_parquet("../data/reservas_hoteles.parquet", engine='auto')
-hoteles_competencia_scrapeado = pd.read_csv("../data/hoteles_competencia.csv")
+df_raw = pd.read_parquet("data/reservas_hoteles.parquet", engine='auto')
+hoteles_competencia_scrapeado = pd.read_csv("data/hoteles_competencia.csv")
 
 def limpieza_inicial(dataframe_limpieza, dataframe_scrapeo):
+    """
+        Realiza una limpieza y transformación inicial de los datos de reservas de hoteles, 
+        integrando información scrapeada de la competencia y generando un conjunto de datos limpio.
+
+    Args:
+    
+        dataframe_limpieza (pd.DataFrame): DataFrame con los datos de reservas de hoteles, incluyendo información de hoteles del grupo y de la competencia. 
+        dataframe_scrapeo (pd.DataFrame): DataFrame con los datos scrapeados de hoteles de la competencia.
+
+     Proceso:
+    
+        1. **Eliminación de duplicados**: Se eliminan registros duplicados en el DataFrame de reservas.
+        2. **Conversión de fechas**: Se convierten las columnas `fecha_reserva`, `inicio_estancia` y `final_estancia` a tipo fecha.
+        3. **Relleno de valores nulos**: Se asignan fechas predeterminadas a valores nulos en `inicio_estancia` y `final_estancia`.
+        4. **Separación de datos**:
+            - Se divide el conjunto de datos en hoteles del grupo y hoteles de la competencia.
+        5. **Cálculo de precios y estrellas promedio**:
+            - Se calculan los precios medios y la valoración media de estrellas por hotel para los hoteles del grupo.
+        6. **Integración de datos scrapeados**:
+            - Se asigna un ID único a los hoteles scrapeados y se unen con los datos originales de la competencia.
+            - Se eliminan columnas redundantes y se homogeniza la estructura de datos.
+        7. **Concatenación de datos**:
+            - Se concatenan los hoteles del grupo con los de la competencia en un único DataFrame.
+        8. **Transformaciones finales**:
+            - Se genera un ID único para clientes y hoteles.
+            - Se ajustan los tipos de datos de las columnas `id_hotel` e `id_cliente` para coincidir con la base de datos.
+        9. **Exportación de datos**:
+            - Se guarda el DataFrame limpio en un archivo CSV en la carpeta `data/`.
+
+    Returns:
+        Archivo CSV y pd.Dataframe: se genera un archivo CSV llamado `reservas_hoteles_limpio.csv` con la información procesada
+        y se imprime la estructura del DataFrame final.
+
+     Nota:
+    
+        - Se usa `info_df(data)` para visualizar la estructura de los datos antes y después de la limpieza.
+        - Las funciones `data_fechas()` y `cambio_id()` deben estar definidas previamente para la conversión de fechas y la generación de IDs únicos.
+    """
     
     data = dataframe_limpieza.copy() # creamos una copia del dataframe recibido sobre el cual vamos a trabajar
 
@@ -72,7 +110,7 @@ def limpieza_inicial(dataframe_limpieza, dataframe_scrapeo):
     df_final["id_hotel"] = df_final["id_hotel"].astype(str) # modificamos el tipo de dato al correspondiente con el de la abse de datos
     df_final["id_cliente"] = df_final["id_cliente"].astype(str) # modificamos el tipo de dato al correspondiente con el de la abse de datos
 
-    df_final.to_csv("../data/reservas_hoteles_limpio2.csv", index = False) # guardamos el dataframe limpio
+    df_final.to_csv("data/reservas_hoteles_limpio.csv", index = False) # guardamos el dataframe limpio
     return print(f"La estructura final del dataframe es: \n {info_df(df_final)}") # Revisamos la información general del dataframe 
 
 
