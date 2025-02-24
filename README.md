@@ -27,6 +27,7 @@ Este proyecto usa Python y requiere las siguientes librerias:
 ## 📊 Resultados y Conclusiones
 
 ## 🔄 Próximos Pasos
+- Saber que clientes han asistido a que eventos para analizar el impacto de los eventos en las reservas
 
 ## 🤝 Contribuciones
 
