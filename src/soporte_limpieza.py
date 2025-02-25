@@ -61,3 +61,4 @@ def cambio_id(dataframe, lista_columnas, nombre_columna_nueva):
 
     dataframe[nombre_columna_nueva] = dataframe[lista_columnas[0]].map(diccionario).astype(str)
     return dataframe
+

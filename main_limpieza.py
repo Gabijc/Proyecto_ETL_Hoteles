@@ -113,6 +113,5 @@ def limpieza_inicial(dataframe_limpieza, dataframe_scrapeo):
     df_final.to_csv("data/reservas_hoteles_limpio.csv", index = False) # guardamos el dataframe limpio
     return print(f"La estructura final del dataframe es: \n {info_df(df_final)}") # Revisamos la información general del dataframe 
 
-
 if __name__ == "__main__":
     limpieza_inicial(df_raw, hoteles_competencia_scrapeado)
