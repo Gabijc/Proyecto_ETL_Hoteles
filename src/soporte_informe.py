@@ -197,5 +197,4 @@ def big_numbers(conn):
 def analisis_hoteles(conn):
     grafico_temporal(conn)
     grafico_hoteles(conn, "Vista_hoteles_grupo", "Recaudacion por hotel del grupo", "Numero de reservas por hotel del grupo")
-    time.sleep(5)
     grafico_hoteles(conn, "Vista_hoteles_competencia", "Recaudacion por hotel de la competencia", "Numero de reservas por hotel de la competencia")
