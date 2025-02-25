@@ -32,4 +32,4 @@ def ETL_hoteles(endpoint, url_scrapeo, dataframe):
 
 
 if __name__ == "__main__":
-    ETL_hoteles(enp, url_scrapeo_competencia, archivo_raw)
+    ETL_hoteles(enp, url_scrapeo_competencia, df_raw)
