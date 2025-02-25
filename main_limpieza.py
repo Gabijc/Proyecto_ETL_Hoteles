@@ -1,10 +1,15 @@
 import pandas as pd
 import numpy as np
 from src.soporte_limpieza import info_df, data_fechas, cambio_id
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+archivo_raw = os.getenv("archivo_raw")
+archivo_scrapeo = os.getenv("archivo_scrapeo")
 
-df_raw = pd.read_parquet("data/reservas_hoteles.parquet", engine='auto')
-hoteles_competencia_scrapeado = pd.read_csv("data/hoteles_competencia.csv")
+df_raw = pd.read_parquet(archivo_raw, engine='auto')
+hoteles_competencia_scrapeado = pd.read_csv(archivo_scrapeo)
 
 def limpieza_inicial(dataframe_limpieza, dataframe_scrapeo):
     """
@@ -111,7 +116,8 @@ def limpieza_inicial(dataframe_limpieza, dataframe_scrapeo):
     df_final["id_cliente"] = df_final["id_cliente"].astype(str) # modificamos el tipo de dato al correspondiente con el de la abse de datos
 
     df_final.to_csv("data/reservas_hoteles_limpio.csv", index = False) # guardamos el dataframe limpio
-    return print(f"La estructura final del dataframe es: \n {info_df(df_final)}") # Revisamos la información general del dataframe 
+    print(f"La estructura final del dataframe es: \n {info_df(df_final)}") # Revisamos la información general del dataframe
+    return df_final 
 
 if __name__ == "__main__":
     limpieza_inicial(df_raw, hoteles_competencia_scrapeado)
