@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import psycopg2 as ps
+from src.soporte_limpieza import info_df
 from src.soporte_carga import conexion_BBDD, carga_tabla_ciudad, carga_tabla_clientes, carga_tabla_eventos, carga_tabla_hoteles, carga_tabla_reservas
 import os
 from dotenv import load_dotenv
@@ -17,6 +18,8 @@ query_ciudad_madrid = "SELECT nombre_ciudad, id_ciudad FROM ciudad"
 query_hoteles_carga = "SELECT nombre_hotel, id_hotel FROM hoteles"
 query_clientes_carga = "SELECT nombre, id_cliente FROM clientes"
 
+print(info_df(data_hoteles))
+print(info_df(data_eventos))
 
 
 if __name__ == "__main__":
