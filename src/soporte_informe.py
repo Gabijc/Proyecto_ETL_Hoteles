@@ -3,6 +3,7 @@ import numpy as np
 from IPython.display import Markdown, display
 import seaborn as sns
 import matplotlib.pyplot as plt
+import time
 
 
 def creacion_vista(conn, nombre_vista):
@@ -131,32 +132,38 @@ def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
     axes[1].set_xticklabels(labels = dataframe[0], rotation=45, ha='right')
 
     plt.show()
+    plt.close(fig)
 
 
 def big_numbers(conn):
+    try:
 
-    creacion_vista(conn, "Vista_hoteles_grupo")
-    creacion_vista(conn, "Vista_hoteles_competencia")
+        creacion_vista(conn, "Vista_hoteles_grupo")
+        creacion_vista(conn, "Vista_hoteles_competencia")
 
-    rec_total = recaudacion_anual(conn, "Vista_hoteles_grupo")
-    rec_total_c = recaudacion_anual(conn, "Vista_hoteles_competencia")
-    p_medio = precio_medio(conn, "Vista_hoteles_grupo")
-    p_medio_c = precio_medio(conn, "Vista_hoteles_competencia")
-    reservas_tot = n_reservas(conn, "Vista_hoteles_grupo")
-    reservas_tot_c = n_reservas(conn, "Vista_hoteles_competencia")
-    v_media = valoracion_media(conn, "Vista_hoteles_grupo")
-    v_media_c = valoracion_media(conn, "Vista_hoteles_competencia")
+        rec_total = recaudacion_anual(conn, "Vista_hoteles_grupo")
+        rec_total_c = recaudacion_anual(conn, "Vista_hoteles_competencia")
+        p_medio = precio_medio(conn, "Vista_hoteles_grupo")
+        p_medio_c = precio_medio(conn, "Vista_hoteles_competencia")
+        reservas_tot = n_reservas(conn, "Vista_hoteles_grupo")
+        reservas_tot_c = n_reservas(conn, "Vista_hoteles_competencia")
+        v_media = valoracion_media(conn, "Vista_hoteles_grupo")
+        v_media_c = valoracion_media(conn, "Vista_hoteles_competencia")
 
-    tabla_bn = f"""
-    | Métrica            | Hoteles_Grupo | Hoteles_Competencia |
-    |--------------------|--------------|---------------------|
-    | Recaudación Total |{rec_total}|  {rec_total_c} |
-    | Precio Medio      |{p_medio}  |{p_medio_c} |
-    | Reservas Totales  |{reservas_tot}       |{reservas_tot_c} |
-    | Valoración Media  |{v_media}  | {v_media_c} |
-    """
-    print(tabla_bn)
+        tabla_bn = f"""
+        | Métrica            | Hoteles_Grupo | Hoteles_Competencia |
+        |--------------------|--------------|---------------------|
+        | Recaudación Total |{rec_total}|  {rec_total_c} |
+        | Precio Medio      |{p_medio}  |{p_medio_c} |
+        | Reservas Totales  |{reservas_tot}       |{reservas_tot_c} |
+        | Valoración Media  |{v_media}  | {v_media_c} |
+        """
+        print(tabla_bn)
 
+    except Exception as e:
+        print(f"Error: {e}")
+        
 def analisis_hoteles(conn):
     grafico_hoteles(conn, "Vista_hoteles_grupo", "Recaudacion por hotel del grupo", "Numero de reservas por hotel del grupo")
+    time.sleep(5)
     grafico_hoteles(conn, "Vista_hoteles_competencia", "Recaudacion por hotel de la competencia", "Numero de reservas por hotel de la competencia")

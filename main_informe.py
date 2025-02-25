@@ -6,6 +6,7 @@ from src.soporte_carga import conexion_BBDD
 from src.soporte_informe import big_numbers, analisis_hoteles
 import os
 from dotenv import load_dotenv
+import time
 
 
 load_dotenv()
