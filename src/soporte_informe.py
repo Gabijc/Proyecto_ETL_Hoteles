@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time
 
 
-def creacion_vista(conn, nombre_vista):
+def creacion_vista(conn, nombre_vista, com_gr):
 
     cur = conn.cursor()
 
@@ -24,7 +24,7 @@ def creacion_vista(conn, nombre_vista):
         FROM hoteles as h
             INNER JOIN  reservas AS r ON h.id_hotel = r.id_hotel
             INNER JOIN  clientes AS c ON r.id_cliente = c.id_cliente
-        WHERE h.competencia = False; 
+        WHERE h.competencia = {com_gr}; 
         """
 
     cur.execute(query)
@@ -39,7 +39,7 @@ def recaudacion_anual(conn, vista):
 
     query_rec_grupo = f""" 
                 SELECT 
-                        SUM(precio_noche)
+                    SUM(precio_noche)
                 FROM "{vista}"; 
         """
 
@@ -59,7 +59,7 @@ def precio_medio(conn, vista):
 
     cur.execute(query_p_medio)
     p_medio = cur.fetchall()
-    round(p_medio[0][0], 2)
+    return round(p_medio[0][0], 2)
 
 # Nº de reservas totales
 def n_reservas(conn, vista):
@@ -72,7 +72,7 @@ def n_reservas(conn, vista):
 
     cur.execute(query_n_reservas)
     reservas_tot = cur.fetchall()
-    reservas_tot[0][0]
+    return reservas_tot[0][0]
 
 # Valoracion media
 def valoracion_media(conn, vista):
@@ -85,7 +85,7 @@ def valoracion_media(conn, vista):
 
     cur.execute(query_v_media)
     v_media = cur.fetchall()
-    round(v_media[0][0], 2)
+    return round(v_media[0][0], 2)
 
 
 def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
@@ -138,8 +138,8 @@ def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
 def big_numbers(conn):
     try:
 
-        creacion_vista(conn, "Vista_hoteles_grupo")
-        creacion_vista(conn, "Vista_hoteles_competencia")
+        creacion_vista(conn, "Vista_hoteles_grupo", False)
+        creacion_vista(conn, "Vista_hoteles_competencia", True)
 
         rec_total = recaudacion_anual(conn, "Vista_hoteles_grupo")
         rec_total_c = recaudacion_anual(conn, "Vista_hoteles_competencia")
@@ -162,7 +162,7 @@ def big_numbers(conn):
 
     except Exception as e:
         print(f"Error: {e}")
-        
+
 def analisis_hoteles(conn):
     grafico_hoteles(conn, "Vista_hoteles_grupo", "Recaudacion por hotel del grupo", "Numero de reservas por hotel del grupo")
     time.sleep(5)
