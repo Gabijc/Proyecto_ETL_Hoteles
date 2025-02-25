@@ -2,15 +2,24 @@
 import pandas as pd
 import numpy as np
 import psycopg2 as ps
+import os
+from dotenv import load_dotenv
 
-def conexion_BBDD(nombre_BBDD , usuario = "postgres", contraseña = "admin", anfitrion = "localhost", puerto = "5432"):
+load_dotenv()
+usuario_BBDD = os.getenv("usuario_BBDD")
+contraseña_BBDD = os.getenv("contraseña_BBDD")
+host_BBDD = os.getenv("host_BBDD")
+port_BBDD = os.getenv("port_BBDD")
+
+
+def conexion_BBDD(nombre_BBDD , usuario = usuario_BBDD, contraseña = contraseña_BBDD, anfitrion = host_BBDD, puerto = port_BBDD):
 
     conn = ps.connect(
-    dbname = nombre_BBDD, 
-    user = usuario,
-    password = contraseña,
-    host = anfitrion,
-    port = puerto)
+                    dbname = nombre_BBDD, 
+                    user = usuario,
+                    password = contraseña,
+                    host = anfitrion,
+                    port = puerto)
 
     return conn
 

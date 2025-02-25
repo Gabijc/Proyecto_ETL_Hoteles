@@ -7,11 +7,17 @@ from webdriver_manager.chrome import ChromeDriverManager # administra la instala
 from selenium.webdriver.chrome.service import Service # permite gestionar el servicio del driver de chrome
 import time
 from src.soporte_extraccion import scrapeo_competencia, eventos_api
+import os 
+from dotenv import load_dotenv
 
-url_ibis = "https://all.accor.com/ssr/app/ibis/hotels/madrid-spain/open/index.es.shtml?compositions=1&stayplus=false&snu=false&hideWDR=false&accessibleRooms=false&hideHotelDetails=false&dateIn=2025-03-01&nights=1&destination=madrid-spain"
+load_dotenv()
+url_api = os.getenv("url_api")
+url_scrapeo = os.getenv("url_scrapeo")
 
-enp = f"https://datos.madrid.es/egob/catalogo/300107-0-agenda-actividades-eventos.json"
+url_scrapeo_competencia = url_scrapeo
+
+enp = url_api
 
 if __name__ == "__main__":
-    scrapeo_competencia(url_ibis)
+    scrapeo_competencia(url_scrapeo_competencia)
     eventos_api(enp)
