@@ -131,7 +131,7 @@ def eventos_api(endpoint):
         for i in data.get('@graph', []): # accedemos a la clave @graph y a la lista que contiene en su interior, para poder acceder a los eventos dentro de la lista 
             diccionario["nombre_evento"].append(i.get('title', None))
             diccionario["url_evento"].append(i.get('link', None))
-            diccionario["codigo_postal"].append(i.get('address', {}).get('area', {}).get('postal-code', None)) # vamos accediendo a las claves, las cuales si no encuentra devolverá un None
+            diccionario["codigo_postal"].append(i.get('address', {}).get('area', {}).get('postal-code', 0)) # vamos accediendo a las claves, las cuales si no encuentra devolverá un None
             diccionario["direccion"].append(i.get('address', {}).get('area', {}).get('street-address', None))
             diccionario["horario"].append(i.get('time', None))
             diccionario["organizacion"].append(i.get('organization', {}).get('organization-name', None))
@@ -146,10 +146,10 @@ def eventos_api(endpoint):
 
         # Modificamos el tipo de dato de las columnas que nos interesa modificar
 
-        dataframe["codigo_postal"] = dataframe["codigo_postal"].astype("Int64")
+        dataframe["codigo_postal"] = dataframe["codigo_postal"].astype(int)
         dataframe["fecha_inicio"] = pd.to_datetime(dataframe["fecha_inicio"], errors = "coerce")
         dataframe["fecha_fin"] = pd.to_datetime(dataframe["fecha_fin"], errors =  "coerce")
 
         dataframe.to_csv("data/eventos_madrid.csv", index = False)
-        
+        dataframe.info()
         print("Extracción de la API realizada con éxito")
