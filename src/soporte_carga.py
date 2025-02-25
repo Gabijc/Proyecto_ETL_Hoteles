@@ -160,3 +160,10 @@ def carga_tabla_reservas(dataframe, query_clientes, query_hoteles, conn):
     
     cur.executemany(insert_query, data_to_insert)
     conn.commit()
+
+def carga_BBDD(conn, df_eventos, df_hoteles, query_ciudad, query_clientes, query_hoteles):
+    carga_tabla_ciudad(conn)
+    carga_tabla_eventos(df_eventos, query_ciudad, conn)
+    carga_tabla_hoteles(df_hoteles, query_ciudad, conn)
+    carga_tabla_clientes(df_hoteles, conn)
+    carga_tabla_reservas(df_hoteles, query_clientes, query_hoteles, conn)

@@ -4,12 +4,6 @@ import numpy as np
 import psycopg2 as ps
 from src.soporte_carga import conexion_BBDD
 from src.soporte_informe import big_numbers, analisis_hoteles
-import os
-from dotenv import load_dotenv
-import time
-
-
-load_dotenv()
 
 
 if __name__ == "__main__":

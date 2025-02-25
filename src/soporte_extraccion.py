@@ -68,6 +68,8 @@ def scrapeo_competencia(url):
 
     print("Scrapeo realizado con éxito")
     driver.close()
+    return hoteles_competencia
+    
 
 def eventos_api(endpoint): 
     """
@@ -151,5 +153,6 @@ def eventos_api(endpoint):
         dataframe["fecha_fin"] = pd.to_datetime(dataframe["fecha_fin"], errors =  "coerce")
 
         dataframe.to_csv("data/eventos_madrid.csv", index = False)
-        dataframe.info()
         print("Extracción de la API realizada con éxito")
+        return dataframe
+        
