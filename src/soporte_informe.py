@@ -134,6 +134,37 @@ def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
     plt.show()
     plt.close(fig)
 
+def grafico_temporal(conn):
+    cur = conn.cursor()
+    query = """ 
+
+        SELECT 
+                fecha_reserva,
+                sum(precio_noche)
+        FROM "Vista_hoteles_grupo"
+        GROUP BY fecha_reserva
+        ORDER BY 2 DESC; 
+"""
+
+    cur.execute(query)
+    q = cur.fetchall()
+    df = pd.DataFrame(q)
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    sns.lineplot(x=0,
+                y=1,
+                data=df)
+
+    ax.set_title(f"Recaudación Temporal Hoteles del grupo", fontsize=10)
+    ax.set_xlabel("Fecha", fontsize=10)
+    ax.set_ylabel("Recaudación", fontsize=10)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.set_xticks(df[0])
+    ax.set_xticklabels(df[0], rotation=45, ha='right')
+
+    plt.show()
+
 
 def big_numbers(conn):
     try:
@@ -151,12 +182,12 @@ def big_numbers(conn):
         v_media_c = valoracion_media(conn, "Vista_hoteles_competencia")
 
         tabla_bn = f"""
-        | Métrica            | Hoteles_Grupo | Hoteles_Competencia |
-        |--------------------|--------------|---------------------|
-        | Recaudación Total |{rec_total}|  {rec_total_c} |
-        | Precio Medio      |{p_medio}  |{p_medio_c} |
-        | Reservas Totales  |{reservas_tot}       |{reservas_tot_c} |
-        | Valoración Media  |{v_media}  | {v_media_c} |
+        | Metrica            | Hoteles_Grupo | Hoteles_Competencia  |
+        |--------------------|---------------|--------------------- |
+        | Recaudacion Total  |{rec_total}    |  {rec_total_c}       |
+        | Precio Medio       |{p_medio}      |  {p_medio_c}         |
+        | Reservas Totales   |{reservas_tot} |  {reservas_tot_c}    |
+        | Valoracion Media   |{v_media}      |  {v_media_c}         | 
         """
         print(tabla_bn)
 
@@ -164,6 +195,7 @@ def big_numbers(conn):
         print(f"Error: {e}")
 
 def analisis_hoteles(conn):
+    grafico_temporal(conn)
     grafico_hoteles(conn, "Vista_hoteles_grupo", "Recaudacion por hotel del grupo", "Numero de reservas por hotel del grupo")
     time.sleep(5)
     grafico_hoteles(conn, "Vista_hoteles_competencia", "Recaudacion por hotel de la competencia", "Numero de reservas por hotel de la competencia")
