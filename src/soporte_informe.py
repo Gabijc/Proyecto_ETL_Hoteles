@@ -7,7 +7,26 @@ import time
 
 
 def creacion_vista(conn, nombre_vista, com_gr):
+    """
+    Crea una vista en la base de datos con información sobre hoteles, reservas y clientes.
 
+    Esta función crea una vista en la base de datos que une las tablas 'hoteles', 'reservas' y 'clientes', 
+    proporcionando información detallada sobre las reservas realizadas en los hoteles. La vista contiene 
+    los siguientes campos: id del hotel, nombre del hotel, valoración del hotel, id de la reserva, fecha de 
+    la reserva, precio por noche, id del cliente y el nombre completo del cliente. La vista se crea solo para 
+    los hoteles que tienen un valor en la columna 'competencia' igual al parámetro `com_gr`.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+        nombre_vista (str): Nombre que se asignará a la vista que se va a crear.
+        com_gr (str): Valor de competencia de los hoteles que se incluirán en la vista.
+
+    Returns:
+        str: Mensaje indicando que la vista ha sido creada correctamente.
+
+    Ejemplo:
+        creacion_vista(conn, "vista_hoteles_reservas", "Alta")
+    """
     cur = conn.cursor()
 
     query = f""" 
@@ -34,7 +53,22 @@ def creacion_vista(conn, nombre_vista, com_gr):
 
 # Recaudacion total anual
 def recaudacion_anual(conn, vista):
+    """
+    Calcula la recaudación anual total a partir de los datos en una vista.
 
+    Esta función calcula la recaudación total por las reservas realizadas, sumando los precios por noche 
+    de todas las reservas en la vista proporcionada. El resultado es redondeado a dos decimales.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+        vista (str): El nombre de la vista que contiene los datos de las reservas.
+
+    Returns:
+        float: La recaudación anual total redondeada a dos decimales.
+
+    Ejemplo:
+        recaudacion_anual(conn, "vista_hoteles_reservas")
+    """
     cur = conn.cursor()
 
     query_rec_grupo = f""" 
@@ -49,7 +83,22 @@ def recaudacion_anual(conn, vista):
 
 # Precio medio noche
 def precio_medio(conn, vista):
+    """
+    Calcula el precio medio por noche de las reservas en una vista.
 
+    Esta función calcula el precio promedio por noche de todas las reservas contenidas en la vista proporcionada. 
+    El resultado es redondeado a dos decimales.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+        vista (str): El nombre de la vista que contiene los datos de las reservas.
+
+    Returns:
+        float: El precio medio por noche redondeado a dos decimales.
+
+    Ejemplo:
+        precio_medio(conn, "vista_hoteles_reservas")
+    """
     cur = conn.cursor()
 
     query_p_medio = f""" 
@@ -63,6 +112,22 @@ def precio_medio(conn, vista):
 
 # Nº de reservas totales
 def n_reservas(conn, vista):
+    """
+    Obtiene el número total de reservas en una vista.
+
+    Esta función cuenta el número total de reservas presentes en la vista proporcionada 
+    y devuelve ese número.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+        vista (str): El nombre de la vista que contiene los datos de las reservas.
+
+    Returns:
+        int: El número total de reservas en la vista.
+
+    Ejemplo:
+        n_reservas(conn, "vista_hoteles_reservas")
+    """
     cur = conn.cursor()
 
     query_n_reservas = f""" 
@@ -76,6 +141,22 @@ def n_reservas(conn, vista):
 
 # Valoracion media
 def valoracion_media(conn, vista):
+    """
+    Calcula la valoración media de los hoteles en una vista.
+
+    Esta función calcula el promedio de la valoración de los hoteles en la vista proporcionada
+    y devuelve el valor redondeado a dos decimales.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+        vista (str): El nombre de la vista que contiene los datos de las valoraciones de los hoteles.
+
+    Returns:
+        float: La valoración media de los hoteles en la vista, redondeada a dos decimales.
+
+    Ejemplo:
+        valoracion_media(conn, "vista_hoteles_reservas")
+    """
     cur = conn.cursor()
 
     query_v_media = f""" 
@@ -89,6 +170,25 @@ def valoracion_media(conn, vista):
 
 
 def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
+    """
+    Genera un gráfico de barras para analizar los ingresos y el número de reservas por hotel.
+
+    Esta función ejecuta una consulta SQL para obtener los ingresos y el número de reservas
+    por hotel, y luego genera dos gráficos de barras utilizando `seaborn`. El primer gráfico
+    muestra la recaudación por hotel y el segundo el número de reservas por hotel.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+        vista (str): El nombre de la vista que contiene los datos de reservas y precios.
+        titulo_recaudacion (str): Título para el gráfico de recaudación.
+        titulo_reservas (str): Título para el gráfico de número de reservas.
+
+    Returns:
+        None: Muestra los gráficos generados sin retornar ningún valor.
+
+    Ejemplo:
+        grafico_hoteles(conn, "vista_hoteles_reservas", "Recaudación por Hotel", "Número de Reservas por Hotel")
+    """
     cur = conn.cursor()
     # Vamos a analizar los ingresos por hotel, y el numero de reservas por hotel
     query = f""" 
@@ -167,6 +267,23 @@ def grafico_temporal(conn):
 
 
 def big_numbers(conn):
+    """
+    Calcula y muestra las métricas clave para el análisis de los hoteles del grupo y su competencia.
+
+    Esta función crea dos vistas en la base de datos: una para los hoteles del grupo y otra para los hoteles de la competencia. 
+    Luego, calcula varias métricas como la recaudación total, el precio medio, el número de reservas totales y la valoración media 
+    tanto para los hoteles del grupo como para los de la competencia, utilizando las vistas creadas. Finalmente, imprime una tabla 
+    con los resultados de las métricas calculadas.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+
+    Returns:
+        None: Muestra la tabla con las métricas calculadas en la consola. No retorna ningún valor.
+
+    Ejemplo:
+        big_numbers(conn)
+    """
     try:
 
         creacion_vista(conn, "Vista_hoteles_grupo", False)
@@ -195,6 +312,22 @@ def big_numbers(conn):
         print(f"Error: {e}")
 
 def analisis_hoteles(conn):
+    """
+    Realiza un análisis gráfico de los datos relacionados con los hoteles del grupo y su competencia.
+
+    Esta función genera varios gráficos que permiten analizar visualmente el comportamiento de los hoteles del grupo y de la competencia. 
+    Incluye un gráfico temporal de la recaudación a lo largo del tiempo y gráficos de recaudación y número de reservas por hotel, tanto 
+    para los hoteles del grupo como para los de la competencia.
+
+    Args:
+        conn (psycopg2.connection): Objeto de conexión a la base de datos PostgreSQL.
+
+    Returns:
+        None: La función genera y muestra gráficos visuales, pero no retorna ningún valor.
+
+    Ejemplo:
+        analisis_hoteles(conn)
+    """
     grafico_temporal(conn)
     grafico_hoteles(conn, "Vista_hoteles_grupo", "Recaudacion por hotel del grupo", "Numero de reservas por hotel del grupo")
     grafico_hoteles(conn, "Vista_hoteles_competencia", "Recaudacion por hotel de la competencia", "Numero de reservas por hotel de la competencia")
