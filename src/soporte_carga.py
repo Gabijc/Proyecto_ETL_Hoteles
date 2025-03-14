@@ -263,7 +263,7 @@ def carga_tabla_reservas(dataframe, query_clientes, query_hoteles, conn):
         inicio_estancia = row["inicio_estancia"]
         final_estancia = row["final_estancia"]
         precio_noche = row["precio_noche"]
-        id_cliente = dictio_clientes.get(row["nombre"])
+        id_cliente = dictio_clientes.get(row["mail"])
         id_hotel = dictio_hoteles.get(row["nombre_hotel"])
 
         data_to_insert.append((id_reserva, fecha_reserva, inicio_estancia, final_estancia, precio_noche, id_cliente, id_hotel))

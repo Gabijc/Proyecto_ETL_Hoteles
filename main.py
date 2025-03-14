@@ -19,7 +19,7 @@ enp = url_api
 df_raw = pd.read_parquet(archivo_raw, engine='auto')
 query_ciudad_madrid = "SELECT nombre_ciudad, id_ciudad FROM ciudad"
 query_hoteles_carga = "SELECT nombre_hotel, id_hotel FROM hoteles"
-query_clientes_carga = "SELECT nombre, id_cliente FROM clientes"
+query_clientes_carga = "SELECT mail, id_cliente FROM clientes"
      
 # Creamos la función de ETL
 def ETL_hoteles(endpoint, url_scrapeo, dataframe):
