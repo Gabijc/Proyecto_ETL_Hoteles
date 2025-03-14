@@ -265,8 +265,12 @@ def carga_tabla_reservas(dataframe, query_clientes, query_hoteles, conn):
         precio_noche = row["precio_noche"]
         id_cliente = dictio_clientes.get(row["mail"])
         id_hotel = dictio_hoteles.get(row["nombre_hotel"])
+        
+        tupla_reserva = (id_reserva, fecha_reserva, inicio_estancia, final_estancia, precio_noche, id_cliente, id_hotel)
 
-        data_to_insert.append((id_reserva, fecha_reserva, inicio_estancia, final_estancia, precio_noche, id_cliente, id_hotel))
+        if tupla_reserva not in data_to_insert:
+            data_to_insert.append(tupla_reserva)
+
     
     insert_query = """ 
                         INSERT INTO reservas (id_reserva, fecha_reserva, inicio_estancia, final_estancia, precio_noche, id_cliente, id_hotel)
