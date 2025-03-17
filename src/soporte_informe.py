@@ -168,6 +168,67 @@ def valoracion_media(conn, vista):
     v_media = cur.fetchall()
     return round(v_media[0][0], 2)
 
+# Nº de hoteles totales
+def n_hoteles(conn, vista):
+    cur = conn.cursor()
+
+    query_n_hoteles = f""" 
+            SELECT count(distinct id_hotel)
+            FROM "{vista}"; 
+    """
+
+    cur.execute(query_n_hoteles)
+    n_hoteles = cur.fetchall()
+    return n_hoteles[0][0]
+
+def n_clientes(conn, tabla):
+    cur = conn.cursor()
+
+    query_n_clientes = f""" 
+            SELECT count(distinct id_cliente)
+            FROM "{tabla}"; 
+    """
+
+    cur.execute(query_n_clientes)
+    n_clientes = cur.fetchall()
+    return n_clientes[0][0]
+
+def n_clientes_recurrentes(conn, tabla):
+    cur = conn.cursor()
+    query = f"""
+        WITH cte_clientes_recurrentes AS (
+        SELECT 
+                id_cliente,
+                count(DISTINCT id_reserva) AS numero_reservas
+        FROM "{tabla}"
+        GROUP BY  id_cliente
+                HAVING count(DISTINCT id_reserva) > 1
+        ORDER BY 2 desc
+        )
+        SELECT 
+                count(DISTINCT id_cliente)
+        FROM cte_clientes_recurrentes;
+        """
+
+    cur.execute(query)
+    n_clientes = cur.fetchall()
+    return n_clientes[0][0]
+
+
+def ticket_medio(ingresos, reservas):
+    
+    ticket_medio_calc = ingresos/reservas
+    return ticket_medio_calc
+
+def reservas_medias(reservas, hoteles):
+    
+    reservas_medias_hotel = reservas/hoteles
+    return reservas_medias_hotel
+
+def ingresos_medios_hotel(ingresos, hoteles):
+    
+    ingresos_medios = ingresos/hoteles
+    return ingresos_medios
 
 def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
     """
