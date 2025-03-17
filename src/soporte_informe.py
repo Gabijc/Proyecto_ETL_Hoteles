@@ -231,6 +231,46 @@ def recurrencia_clientes(conn, tabla, parametro = "clientes recurrentes"):
     n_clientes = cur.fetchall()
     return n_clientes[0][0]
 
+def cuota_mercado(conn, tabla):
+   
+    cur = conn.cursor()
+    # Vamos a analizar los ingresos por hotel, y el numero de reservas por hotel
+    query = f""" SELECT 
+	                competencia,
+	                count(DISTINCT id_hotel) AS Nº_hoteles
+                FROM {tabla} 
+                GROUP BY competencia;
+            """
+
+    cur.execute(query)
+    q = cur.fetchall()
+    dataframe = pd.DataFrame(q)
+    dataframe = dataframe.rename(columns = {0: "Competencia", 1: "Nº_hoteles"})
+    dataframe["Competencia"] = dataframe["Competencia"].apply(lambda x: "Hoteles de la competencia" if x == True else "Hoteles del grupo")
+    dataframe["Cuota de mercado"] = round(dataframe['Nº_hoteles']/29, 2)*100
+    
+    return dataframe
+
+def cuota_clientes(conn, tabla_1, tabla_2):
+   
+    cur = conn.cursor()
+    # Vamos a analizar los ingresos por hotel, y el numero de reservas por hotel
+    query = f""" SELECT 
+	                competencia,
+	                count(DISTINCT r.id_cliente) AS Nº_clientes
+                FROM {tabla_1} as r
+	                JOIN  {tabla_2} as h ON r.id_hotel = h.id_hotel 
+                GROUP BY competencia ;
+            """
+
+    cur.execute(query)
+    q = cur.fetchall()
+    dataframe = pd.DataFrame(q)
+    dataframe = dataframe.rename(columns = {0: "Competencia", 1: "Nº_clientes"})
+    dataframe["Competencia"] = dataframe["Competencia"].apply(lambda x: "Clientes de la competencia" if x == True else "Clientes del grupo")
+    dataframe["Cuota clientes"] = round((dataframe['Nº_clientes']/dataframe["Nº_clientes"].sum())*100, 2)
+    
+    return dataframe
 
 def ticket_medio(ingresos, reservas):
     
@@ -246,6 +286,57 @@ def ingresos_medios_hotel(ingresos, hoteles):
     
     ingresos_medios = ingresos/hoteles
     return ingresos_medios
+
+def info_hoteles(conn, parámetro = "mercado"):
+    cur = conn.cursor()
+
+    if parámetro == "mercado":
+        query = """ SELECT 
+	                    nombre_hotel,
+	                    sum(precio_noche) AS "Ingresos",
+	                    count(DISTINCT id_reserva) AS "Nº_reservas",
+                        avg(h.valoracion) AS "Valoracion_media"
+                    FROM hoteles h 
+	                    JOIN reservas r ON h.id_hotel = r.id_hotel	
+                    GROUP BY nombre_hotel
+                    ORDER BY 2 DESC;
+                    """ 
+        
+    elif parámetro == "grupo":
+        query = """ 
+                SELECT 
+                    nombre_hotel,
+                    sum(precio_noche),
+                    count(id_reserva),
+                    avg(valoracion)
+                FROM "Vista_hoteles_grupo"
+                GROUP BY nombre_hotel
+                ORDER BY 2 DESC; 
+                """
+    elif parámetro == "competencia":
+        query = """ 
+                SELECT 
+                    nombre_hotel,
+                    sum(precio_noche),
+                    count(id_reserva),
+                    avg(valoracion)
+                FROM "Vista_hoteles_competencia"
+                GROUP BY nombre_hotel
+                ORDER BY 2 DESC; 
+                """
+    cur.execute(query)
+    q = cur.fetchall()
+    dataframe = pd.DataFrame(q)
+    dataframe = dataframe.rename(columns = {0: "Hotel", 1: "Ingresos", 2: "Nº reservas", 3:"Valoracion media"})
+    return dataframe
+
+
+
+
+
+
+
+# Aquí están los gráficos no usados para el dashboard en streamlit
 
 def grafico_hoteles(conn, vista, titulo_recaudacion, titulo_reservas):
     """

@@ -2,7 +2,7 @@ import streamlit as st  # type: ignore
 import pandas as pd 
 import plotly.express as px   # type: ignore
 from src.soporte_carga import conexion_BBDD
-from src.soporte_informe import recaudacion_anual, n_hoteles, n_reservas, valoracion_media, ticket_medio, reservas_medias, ingresos_medios_hotel, n_clientes, recurrencia_clientes
+from src.soporte_informe import recaudacion_anual, n_hoteles, n_reservas, valoracion_media, ticket_medio, reservas_medias, ingresos_medios_hotel, n_clientes, recurrencia_clientes, cuota_clientes, cuota_mercado, info_hoteles
 
 
 conn = conexion_BBDD("BBDD_Hoteles")
@@ -49,47 +49,6 @@ clientes_recurrentes = recurrencia_clientes(conn, "reservas")
 clientes_no_recurrentes = recurrencia_clientes(conn, "reservas", "clientes no recurrentes")
 tasa_repeticion = clientes_recurrentes/numero_clientes
 
-def cuota_mercado(conn, tabla):
-   
-    cur = conn.cursor()
-    # Vamos a analizar los ingresos por hotel, y el numero de reservas por hotel
-    query = f""" SELECT 
-	                competencia,
-	                count(DISTINCT id_hotel) AS Nº_hoteles
-                FROM {tabla} 
-                GROUP BY competencia;
-            """
-
-    cur.execute(query)
-    q = cur.fetchall()
-    dataframe = pd.DataFrame(q)
-    dataframe = dataframe.rename(columns = {0: "Competencia", 1: "Nº_hoteles"})
-    dataframe["Competencia"] = dataframe["Competencia"].apply(lambda x: "Hoteles de la competencia" if x == True else "Hoteles del grupo")
-    dataframe["Cuota de mercado"] = round(dataframe['Nº_hoteles']/29, 2)*100
-    
-    return dataframe
-
-def cuota_clientes(conn, tabla_1, tabla_2):
-   
-    cur = conn.cursor()
-    # Vamos a analizar los ingresos por hotel, y el numero de reservas por hotel
-    query = f""" SELECT 
-	                competencia,
-	                count(DISTINCT r.id_cliente) AS Nº_clientes
-                FROM {tabla_1} as r
-	                JOIN  {tabla_2} as h ON r.id_hotel = h.id_hotel 
-                GROUP BY competencia ;
-            """
-
-    cur.execute(query)
-    q = cur.fetchall()
-    dataframe = pd.DataFrame(q)
-    dataframe = dataframe.rename(columns = {0: "Competencia", 1: "Nº_clientes"})
-    dataframe["Competencia"] = dataframe["Competencia"].apply(lambda x: "Clientes de la competencia" if x == True else "Clientes del grupo")
-    dataframe["Cuota clientes"] = round((dataframe['Nº_clientes']/14905)*100, 2)
-    
-    return dataframe
-
 st.set_page_config(page_title = "Dashboard",
                    layout = "centered") # ponemos el titulo de la pestaña de la web
 
@@ -114,6 +73,30 @@ if page == "Análisis general":
                 names="Competencia", # categorías de los datos
                 title="Cuota mercado") # titulo del grafico 
     st.plotly_chart(fig, use_container_width = True) # mostramos el gráfico
+
+    if st.button == "Ingresos por hotel":
+        ingresos_hotel_mdo = info_hoteles(conn)
+        fig = px.bar(ingresos_hotel_mdo, 
+                        x = "Hotel",
+                        y = "Ingresos",
+                        title = "Ingresos por hotel")
+        st.plotly_chart(fig, use_container_width = True) # método para que me muestre el gráfico
+
+    elif st.button == "Reservas por hotel":
+        ingresos_hotel_mdo = info_hoteles(conn)
+        fig = px.bar(ingresos_hotel_mdo, 
+                        x = "Hotel",
+                        y = "Nº reservas",
+                        title = "Reservas por hotel")
+        st.plotly_chart(fig, use_container_width = True) # método para que me muestre el gráfico
+
+    elif st.button == "Valoración por hotel":
+        ingresos_hotel_mdo = info_hoteles(conn)
+        fig = px.bar(ingresos_hotel_mdo, 
+                        x = "Hotel",
+                        y = "Valoracion media",
+                        title = "Valoración media por hotel")
+        st.plotly_chart(fig, use_container_width = True) # método para que me muestre el gráfico
 
 elif page == "Análisis de hoteles del grupo":
 
@@ -159,7 +142,7 @@ elif page == "Análisis de clientes":
                         "Clientes no recurrentes":clientes_no_recurrentes})
     df_clientes_recurrencia = pd.DataFrame(clientes).T.reset_index()
     df_clientes_recurrencia = df_clientes_recurrencia.rename(columns = {"index": "Values",0: "Nº_clientes"})
-    df_clientes_recurrencia["Recurrencia"] = round((df_clientes_recurrencia['Nº_clientes']/14905)*100, 2)
+    df_clientes_recurrencia["Recurrencia"] = round((df_clientes_recurrencia['Nº_clientes']/df_clientes_recurrencia['Nº_clientes'].sum())*100, 2)
     
     fig = px.pie(df_clientes_recurrencia, # dataframe que contiene los datos
                 values='Recurrencia', # columna con los valores para determinar la posicion en el grafico
