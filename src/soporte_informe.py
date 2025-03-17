@@ -330,8 +330,42 @@ def info_hoteles(conn, parámetro = "mercado"):
     dataframe = dataframe.rename(columns = {0: "Hotel", 1: "Ingresos", 2: "Nº reservas", 3:"Valoracion media"})
     return dataframe
 
+def info_temporales(conn, parámetro = "mercado"):
+    cur = conn.cursor()
 
-
+    if parámetro == "mercado":
+        query = """ 
+                SELECT 
+	                fecha_reserva ,
+	                sum(precio_noche) AS "Ingresos_por_fecha",
+	                count(DISTINCT id_reserva) AS "Nº_reservas"
+                FROM reservas r 
+                GROUP BY fecha_reserva ;
+                """ 
+        
+    elif parámetro == "grupo":
+        query = """ 
+                SELECT 
+	                fecha_reserva ,
+	                sum(precio_noche) AS "Ingresos_por_fecha",
+	                count(DISTINCT id_reserva) AS "Nº_reservas"
+                FROM "Vista_hoteles_grupo"
+                GROUP BY fecha_reserva;
+                """
+    elif parámetro == "competencia":
+        query = """ 
+                SELECT 
+                    fecha_reserva ,
+                    sum(precio_noche) AS "Ingresos_por_fecha",
+                    count(DISTINCT id_reserva) AS "Nº_reservas"
+                FROM "Vista_hoteles_competencia"
+                GROUP BY fecha_reserva;
+                """
+    cur.execute(query)
+    q = cur.fetchall()
+    dataframe = pd.DataFrame(q)
+    dataframe = dataframe.rename(columns = {0: "fecha_reserva", 1: "Ingresos", 2: "Nº reservas"})
+    return dataframe
 
 
 
