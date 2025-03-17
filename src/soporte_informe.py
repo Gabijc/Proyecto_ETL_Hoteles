@@ -367,7 +367,23 @@ def info_temporales(conn, parámetro = "mercado"):
     dataframe = dataframe.rename(columns = {0: "fecha_reserva", 1: "Ingresos", 2: "Nº reservas"})
     return dataframe
 
+def info_clientes(conn):
+    cur = conn.cursor()
 
+    query = """ 
+                SELECT 
+	                concat(c.nombre, ' ', c.apellido) AS "Nombre_cliente",
+	                sum(r.precio_noche) AS "Gasto_total",
+	                count(DISTINCT r.id_reserva)
+                FROM clientes c 
+	                JOIN reservas r ON c.id_cliente = r.id_cliente 
+                GROUP BY concat(c.nombre, ' ',c.apellido);
+                """ 
+    cur.execute(query)
+    q = cur.fetchall()
+    dataframe = pd.DataFrame(q)
+    dataframe = dataframe.rename(columns = {0: "Cliente", 1: "Gasto", 2: "Nº reservas"})
+    return dataframe   
 
 
 # Aquí están los gráficos no usados para el dashboard en streamlit

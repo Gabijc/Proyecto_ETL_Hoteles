@@ -2,7 +2,7 @@ import streamlit as st  # type: ignore
 import pandas as pd 
 import plotly.express as px   # type: ignore
 from src.soporte_carga import conexion_BBDD
-from src.soporte_informe import recaudacion_anual, n_hoteles, n_reservas, valoracion_media, ticket_medio, reservas_medias, ingresos_medios_hotel, n_clientes, recurrencia_clientes, cuota_clientes, cuota_mercado, info_hoteles, info_temporales
+from src.soporte_informe import recaudacion_anual, n_hoteles, n_reservas, valoracion_media, ticket_medio, reservas_medias, ingresos_medios_hotel, n_clientes, recurrencia_clientes, cuota_clientes, cuota_mercado, info_hoteles, info_temporales, info_clientes
 
 
 conn = conexion_BBDD("BBDD_Hoteles")
@@ -189,30 +189,66 @@ elif page == "Análisis de hoteles de la competencia":
 
 elif page == "Análisis de clientes":
     
-    st.title("Análisis de clientes") # establecemos el titulo de la pagina
-    col1, col2, col3, col4 = st.columns(4) # esto me dividirá la página en 4 columnas
-    col1.metric("Clientes totales", f"{numero_clientes:,.2f}", border = True)
-    col2.metric("Gasto medio por cliente", f"{gasto_medio_cliente:,.2f}", border = True)
-    col3.metric("Reservas medias por cliente", f"{reserva_media_cliente:,.2f}", border = True)
-    col4.metric("Tasa de repetición", f"{tasa_repeticion:,.2f}", border = True)
+    st.markdown(
+    """
+    <style>
+        section[data-testid="stSidebar"] {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True)
 
-    cuota_clientes_mdo = cuota_clientes(conn, "reservas", "hoteles")
-    fig = px.pie(cuota_clientes_mdo, # dataframe que contiene los datos
-                values='Cuota clientes', # columna con los valores para determinar la posicion en el grafico
-                names="Competencia", # categorías de los datos
-                title="Cuota de clientes") # titulo del grafico 
-    st.plotly_chart(fig, use_container_width = True) # mostramos el gráfico
+    elemento = st.selectbox("Elige un elemento", ["Gasto por cliente", "Nº de reservas por cliente"])
+    
+    with st.container():
+        st.title("Análisis de clientes") # establecemos el titulo de la pagina
+        col1, col2, col3, col4 = st.columns(4) # esto me dividirá la página en 4 columnas
+        col1.metric("Clientes totales", f"{numero_clientes:,.2f}", border = True)
+        col2.metric("Gasto medio por cliente", f"{gasto_medio_cliente:,.2f}", border = True)
+        col3.metric("Reservas medias por cliente", f"{reserva_media_cliente:,.2f}", border = True)
+        col4.metric("Tasa de repetición", f"{tasa_repeticion:,.2f}", border = True)
 
-    
-    clientes = [] 
-    clientes.append({"Clientes recurrentes": clientes_recurrentes,
-                        "Clientes no recurrentes":clientes_no_recurrentes})
-    df_clientes_recurrencia = pd.DataFrame(clientes).T.reset_index()
-    df_clientes_recurrencia = df_clientes_recurrencia.rename(columns = {"index": "Values",0: "Nº_clientes"})
-    df_clientes_recurrencia["Recurrencia"] = round((df_clientes_recurrencia['Nº_clientes']/df_clientes_recurrencia['Nº_clientes'].sum())*100, 2)
-    
-    fig = px.pie(df_clientes_recurrencia, # dataframe que contiene los datos
-                values='Recurrencia', # columna con los valores para determinar la posicion en el grafico
-                names="Values", # categorías de los datos
-                title="Recurrencia de clientes") # titulo del grafico 
-    st.plotly_chart(fig, use_container_width = True) # mostramos el gráfico
+    with st.container():
+        col1, col2 = st.columns([2,1])
+        with col1:
+            cuota_clientes_mdo = cuota_clientes(conn, "reservas", "hoteles")
+            fig1 = px.pie(cuota_clientes_mdo, # dataframe que contiene los datos
+                          values='Cuota clientes', # columna con los valores para determinar la posicion en el grafico
+                          names="Competencia", # categorías de los datos
+                          title="Cuota de clientes") # titulo del grafico 
+            st.plotly_chart(fig1, use_container_width = True) # mostramos el gráfico
+
+            clientes = [] 
+            clientes.append({"Clientes recurrentes": clientes_recurrentes,
+                                "Clientes no recurrentes":clientes_no_recurrentes})
+            df_clientes_recurrencia = pd.DataFrame(clientes).T.reset_index()
+            df_clientes_recurrencia = df_clientes_recurrencia.rename(columns = {"index": "Values",0: "Nº_clientes"})
+            df_clientes_recurrencia["Recurrencia"] = round((df_clientes_recurrencia['Nº_clientes']/df_clientes_recurrencia['Nº_clientes'].sum())*100, 2)
+            
+            fig2 = px.pie(df_clientes_recurrencia, # dataframe que contiene los datos
+                        values='Recurrencia', # columna con los valores para determinar la posicion en el grafico
+                        names="Values", # categorías de los datos
+                        title="Recurrencia de clientes") # titulo del grafico 
+            st.plotly_chart(fig2, use_container_width = True) # mostramos el gráfico
+
+        with col2:
+            tabla_clientes = info_clientes(conn)
+
+            if elemento == "Gasto por cliente":
+                fig3 = px.bar(tabla_clientes, 
+                            x = "Gasto",
+                            y = "Cliente",
+                            title = "Gasto por cliente",
+                            orientation = "h")
+                st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
+            elif elemento == "Nº de reservas por cliente":
+                fig4 = px.bar(tabla_clientes, 
+                            x = "Nº reservas",
+                            y = "Cliente",
+                            title = "Nº de reservas por cliente",
+                            orientation = "h")
+                st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
