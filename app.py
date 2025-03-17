@@ -48,6 +48,23 @@ reserva_media_cliente = reservas_mdo/numero_clientes
 clientes_recurrentes = n_clientes_recurrentes(conn, "reservas")
 tasa_repeticion = clientes_recurrentes/numero_clientes
 
+def grafico_hoteles(conn, tabla):
+   
+    cur = conn.cursor()
+    # Vamos a analizar los ingresos por hotel, y el numero de reservas por hotel
+    query = f""" 
+        SELECT *
+        FROM "{tabla}"; 
+    """
+
+    cur.execute(query)
+    q = cur.fetchall()
+    dataframe = pd.DataFrame(q)
+    cuota_mercado = dataframe.groupby(2).size().reset_index(name='count')
+    cuota_mercado['market_share'] = round((cuota_mercado['count'] / dataframe.shape[0]) * 100, 2)
+    cuota_mercado = cuota_mercado.rename(columns = {2: "Bool"})
+    return cuota_mercado
+    
 
 st.set_page_config(page_title = "Dashboard",
                    layout = "centered") # ponemos el titulo de la pestaña de la web
@@ -66,6 +83,14 @@ if page == "Análisis general":
     col4.metric("Reservas medias por hotel", f"{reservas_medias_mdo:,.2f}", border = True)
     col5.metric("Ticket medio", f"{ticket_medio_mdo:,.2f}", border = True)
 
+    cuota_mercado = grafico_hoteles(conn, "hoteles")
+
+    fig = px.pie(cuota_mercado,
+                values='market_share',
+                names="Bool",
+                title="Cuota mercado")
+    st.plotly_chart(fig, use_container_width = True) # método para que me muestre el gráfico
+
 elif page == "Análisis de hoteles del grupo":
 
     st.title("Análisis de hoteles del grupo") # establecemos el titulo de la pagina
@@ -76,6 +101,7 @@ elif page == "Análisis de hoteles del grupo":
         col3.metric("Reservas totales", f"{reservas_tot_grupo:,.2f}", border = True)
         col4.metric("Valoracion media", f"{v_media_grupo:,.2f}", border = True)
         col5.metric("Ticket medio", f"{ticket_medio_grupo:,.2f}", border = True)
+
 
 elif page == "Análisis de hoteles de la competencia":
 
