@@ -49,8 +49,11 @@ clientes_recurrentes = recurrencia_clientes(conn, "reservas")
 clientes_no_recurrentes = recurrencia_clientes(conn, "reservas", "clientes no recurrentes")
 tasa_repeticion = clientes_recurrentes/numero_clientes
 
-st.set_page_config(page_title = "Dashboard",
-                   layout = "centered") # ponemos el titulo de la pestaña de la web
+st.set_page_config(page_title = "Dashboard_Hoteles",
+                    page_icon="🏨",
+                    layout="wide",
+                    initial_sidebar_state="collapsed",
+                    menu_items={ 'Get Help': "https://github.com/Gabijc/Proyecto_ETL_Hoteles"}) 
 
 # creamos una nagevación lateral, a la cual tenemos que poner una serie de paginas. me generará un sidebar a la izquierda que me permetirña navegar oir diferentes páginas
 st.sidebar.title("Navegación")
@@ -58,63 +61,90 @@ page = st.sidebar.radio(label = "Selecciona una página",
                         options = ["Análisis general", "Análisis de hoteles del grupo", "Análisis de hoteles de la competencia", "Análisis de clientes"])
 
 if page == "Análisis general":
+
+    elemento = st.selectbox("Elige un elemento", ["Evolución temporal de reservas", "Evolución temporal de ingresos"])
+    elemento2 = st.selectbox("Elige un elemento", ["Reservas por hotel", "Ingresos por hotel", "Valoracion por hotel"])
+    
     st.title("Análisis general") # establecemos el titulo de la pagina
+    #st.header("Análisis general", divider="gray")
     col1, col2, col3, col4, col5 = st.columns(5)
-    col1.metric("Nº Hoteles", f"{n_hoteles_mdo:,.2f}", border = True)
-    col2.metric("Valoracion media", f"{v_media_mdo:,.2f}", border = True)
-    col3.metric("Ingreso medio por hotel", f"{ing_medio_por_hotel:,.2f}", border = True)
-    col4.metric("Reservas medias por hotel", f"{reservas_medias_mdo:,.2f}", border = True)
-    col5.metric("Ticket medio", f"{ticket_medio_mdo:,.2f}", border = True)
+    col1.metric("Nº Hoteles", f"{n_hoteles_mdo:,.2f}",  border = True)
+    col2.metric("Valoracion media", f"{v_media_mdo:,.2f}",  border = True)
+    col3.metric("Ingreso medio por hotel", f"{ing_medio_por_hotel:,.2f}",  border = True)
+    col4.metric("Reservas medias por hotel", f"{reservas_medias_mdo:,.2f}",  border = True)
+    col5.metric("Ticket medio", f"{ticket_medio_mdo:,.2f}",  border = True)
 
-    cuota_mercado_gr = cuota_mercado(conn, "hoteles")
+    with st.container():
+        
+        col1, col2 = st.columns([1.5, 1.5])
 
-    fig = px.pie(cuota_mercado_gr, # dataframe que contiene los datos
-                values='Cuota de mercado', # columna con los valores para determinar la posicion en el grafico
-                names="Competencia", # categorías de los datos
-                title="Cuota mercado") # titulo del grafico 
-    st.plotly_chart(fig, use_container_width = True) # mostramos el gráfico
- 
-    #if st.button == "Ingresos por hotel":
-    ingresos_hotel_mdo = info_hoteles(conn)
+        with col1:
+            cuota_mercado_gr = cuota_mercado(conn, "hoteles")
+            fig1 = px.pie(cuota_mercado_gr, # dataframe que contiene los datos
+                        values='Cuota de mercado', # columna con los valores para determinar la posicion en el grafico
+                        names="Competencia", # categorías de los datos
+                        title="Cuota mercado") # titulo del grafico 
+            st.plotly_chart(fig1, use_container_width = True) # mostramos el gráfico
+            
+            analisis_temporal_mdo = info_temporales(conn)
+            if elemento == "Evolución temporal de reservas":
+                fig2 = px.line(analisis_temporal_mdo, 
+                                x = "fecha_reserva",
+                                y = "Ingresos",
+                                title = "Evolución temporal de ingresos en el mercado")
+                st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
 
-    fig1 = px.bar(ingresos_hotel_mdo, 
-                        x = "Ingresos",
-                        y = "Hotel",
-                        title = "Ingresos por hotel",
-                        orientation = "h")
-    st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
+            elif elemento == "Evolución temporal de ingresos":
+                fig3 = px.line(analisis_temporal_mdo, 
+                                x = "fecha_reserva",
+                                y = "Nº reservas",
+                                title = "Evolución temporal de reservas en el mercado")
+                st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
-    #if st.button == "Reservas por hotel":
-    fig2 = px.bar(ingresos_hotel_mdo, 
-                        x = "Nº reservas",
-                        y = "Hotel",
-                        title = "Reservas por hotel",
-                        orientation = "h")
-    st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
+        with col2:
+            ingresos_hotel_mdo = info_hoteles(conn)
+            if elemento2 == "Reservas por hotel":
+                fig1 = px.bar(ingresos_hotel_mdo, 
+                                    x = "Ingresos",
+                                    y = "Hotel",
+                                    title = "Ingresos por hotel",
+                                    orientation = "h")
+                fig1.update_layout( width=800, 
+                        height=800,
+                        title_x=0.3)
+                fig1.update_xaxes(title=None)
+                fig1.update_yaxes(title=None)
+                st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
 
-    #if st.button == "Valoración por hotel":
-    fig3 = px.bar(ingresos_hotel_mdo, 
-                        x = "Valoracion media",
-                        y = "Hotel",
-                        title = "Valoración media por hotel",
-                        orientation = "h")
-    st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
-
-    analisis_temporal_mdo = info_temporales(conn)
-    fig4 = px.line(analisis_temporal_mdo, 
-                      x = "fecha_reserva",
-                      y = "Ingresos",
-                      title = "Evolución temporal de ingresos en el mercado")
-    st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
-
-    fig5 = px.line(analisis_temporal_mdo, 
-                      x = "fecha_reserva",
-                      y = "Nº reservas",
-                      title = "Evolución temporal de reservas en el mercado")
-    st.plotly_chart(fig5, use_container_width = True) # método para que me muestre el gráfico
+            elif elemento2 == "Ingresos por hotel":
+                fig2 = px.bar(ingresos_hotel_mdo, 
+                                    x = "Nº reservas",
+                                    y = "Hotel",
+                                    title = "Reservas por hotel",
+                                    orientation = "h")
+                fig2.update_layout( width=800, 
+                        height=800,
+                        title_x=0.3)
+                fig2.update_xaxes(title=None)
+                fig2.update_yaxes(title=None)
+                st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
+            elif elemento2 == "Valoracion por hotel":
+                fig3 = px.bar(ingresos_hotel_mdo, 
+                                    x = "Valoracion media",
+                                    y = "Hotel",
+                                    title = "Valoración media por hotel",
+                                    orientation = "h")
+                fig3.update_layout( width=800, 
+                        height=800,
+                        title_x=0.3)
+                fig3.update_xaxes(title=None)
+                fig3.update_yaxes(title=None)
+                st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
 elif page == "Análisis de hoteles del grupo":
 
+    elemento_analisis = st.selectbox("Elige un elemento", ["Evolución temporal de reservas", "Evolución temporal de ingresos"])
+    
     st.title("Análisis de hoteles del grupo") # establecemos el titulo de la pagina
     with st.container():
         col1, col2, col3, col4, col5 = st.columns(5) # esto me dividirá la página en 4 columnas
@@ -124,38 +154,51 @@ elif page == "Análisis de hoteles del grupo":
         col4.metric("Valoracion media", f"{v_media_grupo:,.2f}", border = True)
         col5.metric("Ticket medio", f"{ticket_medio_grupo:,.2f}", border = True)
 
-    ingresos_hoteles_grupo = info_hoteles(conn, "grupo")
+    with st.container():
+        col1, col2 = st.columns([1.5, 1.5])
+        ingresos_hoteles_grupo = info_hoteles(conn, "grupo")
 
-    fig1 = px.bar(ingresos_hoteles_grupo, 
-                        x = "Hotel",
-                        y = "Ingresos",
-                        title = "Ingresos por hotel")
-    st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
+        with col1:
+            fig2 = px.bar(ingresos_hoteles_grupo, 
+                                x = "Hotel",
+                                y = "Nº reservas",
+                                title = "Reservas por hotel")
+            st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
 
-    fig2 = px.bar(ingresos_hoteles_grupo, 
-                        x = "Hotel",
-                        y = "Nº reservas",
-                        title = "Reservas por hotel")
-    st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
+            fig3 = px.bar(ingresos_hoteles_grupo, 
+                                x = "Hotel",
+                                y = "Valoracion media",
+                                title = "Valoración media por hotel")
+            st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
-    fig3 = px.bar(ingresos_hoteles_grupo, 
-                        x = "Hotel",
-                        y = "Valoracion media",
-                        title = "Valoración media por hotel")
-    st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
+        with col2: 
+            fig1 = px.bar(ingresos_hoteles_grupo, 
+                                x = "Ingresos",
+                                y = "Hotel",
+                                title = "Ingresos por hotel", 
+                                orientation= "h")
+            fig1.update_layout( width=800, 
+                        height=800,
+                        title_x=0.3)
+            fig1.update_xaxes(title=None)
+            fig1.update_yaxes(title=None)
+            st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
 
     analisis_temporal_grupo = info_temporales(conn, "grupo")
-    fig4 = px.line(analisis_temporal_grupo, 
-                      x = "fecha_reserva",
-                      y = "Ingresos",
-                      title = "Evolución temporal de ingresos del grupo")
-    st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
-
-    fig5 = px.line(analisis_temporal_grupo, 
-                      x = "fecha_reserva",
-                      y = "Nº reservas",
-                      title = "Evolución temporal de reservas del grupo")
-    st.plotly_chart(fig5, use_container_width = True) # método para que me muestre el gráfico
+    if elemento_analisis == "Evolución temporal de reservas":
+        
+        fig4 = px.line(analisis_temporal_grupo, 
+                        x = "fecha_reserva",
+                        y = "Ingresos",
+                        title = "Evolución temporal de ingresos del grupo")
+        st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
+        
+    elif elemento_analisis == "Evolución temporal de ingresos":
+        fig5 = px.line(analisis_temporal_grupo, 
+                        x = "fecha_reserva",
+                        y = "Nº reservas",
+                        title = "Evolución temporal de reservas del grupo")
+        st.plotly_chart(fig5, use_container_width = True) # método para que me muestre el gráfico
 
 elif page == "Análisis de hoteles de la competencia":
 
@@ -188,19 +231,6 @@ elif page == "Análisis de hoteles de la competencia":
     st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
 elif page == "Análisis de clientes":
-    
-    st.markdown(
-    """
-    <style>
-        section[data-testid="stSidebar"] {
-            position: fixed;
-            right: 0;
-            top: 0;
-            height: 100vh;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True)
 
     elemento = st.selectbox("Elige un elemento", ["Gasto por cliente", "Nº de reservas por cliente"])
     
@@ -213,13 +243,15 @@ elif page == "Análisis de clientes":
         col4.metric("Tasa de repetición", f"{tasa_repeticion:,.2f}", border = True)
 
     with st.container():
-        col1, col2 = st.columns([2,1])
+        col1, col2 = st.columns([1.5, 1.5])
         with col1:
             cuota_clientes_mdo = cuota_clientes(conn, "reservas", "hoteles")
+
             fig1 = px.pie(cuota_clientes_mdo, # dataframe que contiene los datos
                           values='Cuota clientes', # columna con los valores para determinar la posicion en el grafico
                           names="Competencia", # categorías de los datos
                           title="Cuota de clientes") # titulo del grafico 
+
             st.plotly_chart(fig1, use_container_width = True) # mostramos el gráfico
 
             clientes = [] 
@@ -236,19 +268,44 @@ elif page == "Análisis de clientes":
             st.plotly_chart(fig2, use_container_width = True) # mostramos el gráfico
 
         with col2:
+
             tabla_clientes = info_clientes(conn)
 
             if elemento == "Gasto por cliente":
-                fig3 = px.bar(tabla_clientes, 
+
+                tabla_clientes_gasto = tabla_clientes.sort_values("Gasto", ascending = False).head(30)
+                fig3 = px.bar(tabla_clientes_gasto, 
                             x = "Gasto",
                             y = "Cliente",
                             title = "Gasto por cliente",
                             orientation = "h")
+                fig3.update_layout( width=1000, 
+                                    height=800,
+                                    title_x=0.3,
+                                    font_family="Courier New",
+                                    font_color="blue",
+                                    title_font_family="Times New Roman",
+                                    legend_title_font_color="green")
+                
+                fig3.update_xaxes(title=None)
+                fig3.update_yaxes(title=None)
                 st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
+
             elif elemento == "Nº de reservas por cliente":
-                fig4 = px.bar(tabla_clientes, 
+
+                tabla_clientes_reservas = tabla_clientes.sort_values("Nº reservas", ascending = False).head(30)
+                fig4 = px.bar(tabla_clientes_reservas, 
                             x = "Nº reservas",
                             y = "Cliente",
                             title = "Nº de reservas por cliente",
-                            orientation = "h")
+                            orientation = "h")  
+                fig4.update_layout( width=1000,  
+                                    height=800,
+                                    title_x=0.3,
+                                    font_family="Courier New",
+                                    font_color="blue",
+                                    title_font_family="Times New Roman",
+                                    legend_title_font_color="green")
+                fig4.update_xaxes(title=None)
+                fig4.update_yaxes(title=None)
                 st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
