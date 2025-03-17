@@ -193,22 +193,39 @@ def n_clientes(conn, tabla):
     n_clientes = cur.fetchall()
     return n_clientes[0][0]
 
-def n_clientes_recurrentes(conn, tabla):
+def recurrencia_clientes(conn, tabla, parametro = "clientes recurrentes"):
     cur = conn.cursor()
-    query = f"""
-        WITH cte_clientes_recurrentes AS (
-        SELECT 
-                id_cliente,
-                count(DISTINCT id_reserva) AS numero_reservas
-        FROM "{tabla}"
-        GROUP BY  id_cliente
-                HAVING count(DISTINCT id_reserva) > 1
-        ORDER BY 2 desc
-        )
-        SELECT 
-                count(DISTINCT id_cliente)
-        FROM cte_clientes_recurrentes;
-        """
+    if parametro == "clientes recurrentes":
+
+        query = f"""
+            WITH cte_recurrencia_clientes AS (
+            SELECT 
+                    id_cliente,
+                    count(DISTINCT id_reserva) AS numero_reservas
+            FROM "{tabla}"
+            GROUP BY  id_cliente
+                    HAVING count(DISTINCT id_reserva) > 1
+            ORDER BY 2 desc
+            )
+            SELECT 
+                    count(DISTINCT id_cliente)
+            FROM cte_recurrencia_clientes;
+            """
+    elif parametro == "clientes no recurrentes":
+            query = f"""
+            WITH cte_recurrencia_clientes AS (
+            SELECT 
+                    id_cliente,
+                    count(DISTINCT id_reserva) AS numero_reservas
+            FROM "{tabla}"
+            GROUP BY  id_cliente
+                    HAVING count(DISTINCT id_reserva) <= 1
+            ORDER BY 2 desc
+            )
+            SELECT 
+                    count(DISTINCT id_cliente)
+            FROM cte_recurrencia_clientes;
+            """
 
     cur.execute(query)
     n_clientes = cur.fetchall()
