@@ -55,10 +55,26 @@ st.set_page_config(page_title = "Dashboard_Hoteles",
                     initial_sidebar_state="collapsed",
                     menu_items={ 'Get Help': "https://github.com/Gabijc/Proyecto_ETL_Hoteles"}) 
 
+def set_bg_color(color):
+    st.markdown(
+        f"""
+         <style>
+         .stApp {{
+             background-color: {color};
+         }}
+         </style>
+         """,
+        unsafe_allow_html=True
+    )
+
+# Ejemplo de uso:
+#set_bg_color('#E5F6E3')  # Un verde claro
+
 # creamos una nagevación lateral, a la cual tenemos que poner una serie de paginas. me generará un sidebar a la izquierda que me permetirña navegar oir diferentes páginas
 st.sidebar.title("Navegación")
 page = st.sidebar.radio(label = "Selecciona una página",
                         options = ["Análisis general", "Análisis de hoteles del grupo", "Análisis de hoteles de la competencia", "Análisis de clientes"])
+
 
 if page == "Análisis general":
 
@@ -73,7 +89,7 @@ if page == "Análisis general":
     col3.metric("Ingreso medio por hotel", f"{ing_medio_por_hotel:,.2f}",  border = True)
     col4.metric("Reservas medias por hotel", f"{reservas_medias_mdo:,.2f}",  border = True)
     col5.metric("Ticket medio", f"{ticket_medio_mdo:,.2f}",  border = True)
-
+    
     with st.container():
         
         col1, col2 = st.columns([1.5, 1.5])
@@ -83,7 +99,12 @@ if page == "Análisis general":
             fig1 = px.pie(cuota_mercado_gr, # dataframe que contiene los datos
                         values='Cuota de mercado', # columna con los valores para determinar la posicion en el grafico
                         names="Competencia", # categorías de los datos
-                        title="Cuota mercado") # titulo del grafico 
+                        title="Cuota mercado") 
+            fig1.update_layout(title_font_size = 24,
+                               font_color = "white",
+                               plot_bgcolor = "white",
+                               paper_bgcolor = "white",
+                               legend = dict(font = dict(color = "white", size = 20)))
             st.plotly_chart(fig1, use_container_width = True) # mostramos el gráfico
             
             analisis_temporal_mdo = info_temporales(conn)
@@ -109,8 +130,8 @@ if page == "Análisis general":
                                     y = "Hotel",
                                     title = "Ingresos por hotel",
                                     orientation = "h")
-                fig1.update_layout( width=800, 
-                        height=800,
+                fig1.update_layout( width=100, 
+                        height=1000,
                         title_x=0.3)
                 fig1.update_xaxes(title=None)
                 fig1.update_yaxes(title=None)
@@ -122,8 +143,8 @@ if page == "Análisis general":
                                     y = "Hotel",
                                     title = "Reservas por hotel",
                                     orientation = "h")
-                fig2.update_layout( width=800, 
-                        height=800,
+                fig2.update_layout( width=100, 
+                        height=1000,
                         title_x=0.3)
                 fig2.update_xaxes(title=None)
                 fig2.update_yaxes(title=None)
