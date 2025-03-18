@@ -178,7 +178,7 @@ elif page == "Análisis de hoteles del grupo":
         col1, col2, col3, col4, col5 = st.columns(5) # esto me dividirá la página en 4 columnas
         col1.metric("Nº Hoteles", f"{n_hoteles_grupo}", delta = n_hoteles_grupo-n_hoteles_comp ,border = True)
         col2.metric("Ingresos totales", f"{rec_total_grupo:,.2f}", delta = rec_total_grupo - rec_total_comp,border = True)
-        col3.metric("Reservas totales", f"{reservas_tot_grupo:,.2f}", delta = round(reservas_tot_grupo- reservas_tot_comp, 2) ,border = True)
+        col3.metric("Reservas totales", f"{reservas_tot_grupo:,.2f}", delta = round(reservas_tot_grupo - reservas_tot_comp, 2) ,border = True)
         col4.metric("Valoracion media", f"{v_media_grupo:,.2f}", delta = round(v_media_mdo- v_media_grupo, 2) ,border = True)
         col5.metric("Ticket medio", f"{ticket_medio_grupo:,.2f}", delta = round(ticket_medio_mdo - ticket_medio_grupo, 2), border = True)
 
@@ -195,8 +195,8 @@ elif page == "Análisis de hoteles del grupo":
 
             fig3 = px.bar(ingresos_hoteles_grupo, 
                                 x = "Hotel",
-                                y = "Valoración media",
-                                title = "Valoración media por hotel")
+                                y = "Valoracion media",
+                                title = "Valoracion media por hotel")
             st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
         with col2: 
@@ -236,8 +236,8 @@ elif page == "Análisis de hoteles de la competencia":
         col1, col2, col3, col4, col5 = st.columns(5) # esto me dividirá la página en 4 columnas
         col1.metric("Nº Hoteles", f"{n_hoteles_comp}",delta = n_hoteles_comp - n_hoteles_grupo, border = True)
         col2.metric("Ingresos totales", f"{rec_total_comp:,.2f}",delta = round(rec_total_comp - rec_total_grupo, 2), border = True)
-        col3.metric("Valoracion media", f"{v_media_comp:,.2f}", delta = reservas_tot_comp - reservas_tot_grupo, border = True)
-        col4.metric("Reservas totales", f"{reservas_tot_comp:,.2f}",delta = round(v_media_comp - v_media_mdo, 2), border = True)
+        col3.metric("Valoracion media", f"{v_media_comp:,.2f}", delta = round(v_media_comp - v_media_mdo, 2), border = True)
+        col4.metric("Reservas totales", f"{reservas_tot_comp:,.2f}",delta = round(reservas_tot_comp - reservas_tot_grupo, 2), border = True)
         col5.metric("Ticket medio", f"{ticket_medio_comp:,.2f}", delta = round(ticket_medio_mdo - ticket_medio_comp,2), border = True)
    
     with st.container():
