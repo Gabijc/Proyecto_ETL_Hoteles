@@ -33,6 +33,7 @@ Nuestra empresa, dedicada al sector hotelero en Madrid, busca mejorar la toma de
 ├── main_informe.py                             # Script para realizar el scraping de datos de la competencia
 ├── main_limpieza.py                            # Script para realizar la limpieza de los datos.
 ├── main.py                                     # Script para realizar el proceso de ETL y la generación de insights.
+├── app.py                                      # Script de creación de un dashbaord interactivo
 ├── README.md                                   # Descripción del proyecto
 ├── /requirements.txt                           # Archivo de dependencias para el proyecto
 ├── .env                                        # Archivo de variables de entorno (no debe subirse al repositorio)
@@ -56,6 +57,8 @@ Este proyecto usa Python y PostgreSQL, y requiere las siguientes librerías:
 
 - Los hoteles del grupo han obtenido una recaudación superior a los de la competencia, además de tener unos precios medios superiores. 
 - La valoración media de los hoteles del grupo es inferior a la de los hoteles de la competencia.
+
+Para ver los resultados completos revisar el dashboard creado en Streamlit (app.py) o el siguiente enlace con el dashbaord creado en PowerBi: https://app.powerbi.com/groups/me/reports/5f585c08-83f5-4f5f-b86d-56056d27f027/73a9ce60d0593b3d4860?experience=power-bi&bookmarkGuid=288992a06a124c61ad18
 
 ## 🔄 Próximos Pasos
 - Obtener información sobre la asistencia de los clientes a los eventos en las fechas de estancia.
