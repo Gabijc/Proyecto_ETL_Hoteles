@@ -70,6 +70,8 @@ def set_bg_color(color):
 # Ejemplo de uso:
 #set_bg_color('#E5F6E3')  # Un verde claro
 
+# PENDIENTE TERMINAR ESTILO APP, COLORES GRAFICOS, FONDO....
+
 # creamos una nagevación lateral, a la cual tenemos que poner una serie de paginas. me generará un sidebar a la izquierda que me permetirña navegar oir diferentes páginas
 st.sidebar.title("Navegación")
 page = st.sidebar.radio(label = "Selecciona una página",
