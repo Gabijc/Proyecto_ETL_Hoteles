@@ -68,26 +68,30 @@ En este apartado realizamos un análisis temporal de la recaudacion obtenida por
 Podemos observar que la recaudación de los hoteles ha sido bastante similar en todos los casos. El hotel que ha obtenido una mayor recaudación ha sido el Hotel Monte Verde, y el que menos el Hotel Palacio Imperial. En cuanto al número de reservas, observamos una casuística similar. En este caso el hotel con el mayor número de reservas ha sido el Hotel Sol y Luna, y el que menos ha sido el Hotel Palacio Imperial.
 
 <div style="text-align: center;">
-    <img src="imagenes/figura_grupo.png" alt="Imagen de ejemplo" width="500"/>
+    <img src="imagenes/reservas hoteles grupo.png" alt="Imagen de ejemplo" width="500"/>
+</div>
+
+<div style="text-align: center;">
+    <img src="imagenes/ingresos hoteles grupo.png" alt="Imagen de ejemplo" width="500"/>
 </div>
 
 
 Si analizamos la recaudación obtenida de temporalmente durante la primera mitad del mes de febrero, podemos observar que la primera semana ha tenido un volumen de recaudacion significativamente superior al de la segunda semana. Asimismo vemos que la recaudacion no presenta una tendencia clara, sino una alta variabilidad a lo largo del periodo. El pico más alto de recaudacion se encuentra en el día 6 del mes y el más bajo el día 8 del mes. 
 
 <div style="text-align: center;">
-    <img src="imagenes/figura_temporal.png" alt="Imagen de ejemplo" width="500"/>
+    <img src="imagenes/evolucion temporal grupo.png" alt="Imagen de ejemplo" width="500"/>
 </div>
 
 
 `Hoteles de la competencia`
 
-En el caso de los hoteles de la competencia podemos observar que la recaudaciñon varía significativamente en cada hotel. EL hotel que ha obtenido una mayor recaudación ha sido el ibis Madrid Centro las Ventas, y el que menos el ibis budget Madrid Alcorcón Móstoles. 
+En el caso de los hoteles de la competencia podemos observar que la recaudaciñon varía significativamente en cada hotel. EL hotel que ha obtenido una mayor recaudación ha sido el ibis Madrid Centro las Ventas, y el que menos el ibis Madrid Getafe. 
 
 En el caso de las reservas por hotel pasa al contrario, hay una gran similitud en las reservas realizadas por hotel. El hotel con el mayor número de reservas ha sido el ibis budget Madrid Centro las Ventas, y el que menos ha sido el ibis Madrid Aerouperto Barajas. 
 
 
 <div style="text-align: center;">
-    <img src="imagenes/figura_competencia.png" alt="Imagen de ejemplo" width="500"/>
+    <img src="imagenes/graficos competencia.png" alt="Imagen de ejemplo" width="500"/>
 </div>
 
 
