@@ -54,10 +54,10 @@ Los hoteles del grupo han obtenido una recaudación total superior a los de la c
 
 | Métrica            | Hoteles_Grupo | Hoteles_Competencia  |
 |--------------------|---------------|----------------------|
-| Recaudación Total  | 2.703.317,14    | 561.494            |
-| Precio Medio       | 275.06        | 108,56              |
+| Recaudación Total  | 2.703.317,14 €    | 520,101 €           |
+| Precio Medio       | 275.06 €        | 100,56 €              |
 | Reservas Totales   | 9.828          | 5.172                |
-| Valoración Media   | 3,01          | 4,33                |
+| Valoración Media   | 3,01          | 4,47                |
 
 ### Visualizaciones
 

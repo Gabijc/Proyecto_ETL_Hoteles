@@ -92,7 +92,7 @@ if page == "Análisis general":
         col1, col2 = st.columns([2, 1])
         with col2:
             elemento = st.selectbox("Selecciona una métrica de evolución", ["Evolución temporal de reservas", "Evolución temporal de ingresos"])
-            elemento2 = st.selectbox("Selecciona una métrica de análisis", ["Reservas por hotel", "Ingresos por hotel", "Valoracion por hotel"])
+            elemento2 = st.selectbox("Selecciona una métrica de análisis", ["Reservas por hotel", "Ingresos por hotel", "Valoración por hotel"])
     
     with st.container():
         
@@ -118,8 +118,9 @@ if page == "Análisis general":
                                 x = "fecha_reserva",
                                 y = "Ingresos",
                                 title = "Evolución temporal de ingresos en el mercado")
-                st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
                 fig2.update_layout(title_font_size = 15, title_x=0.3)
+                st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
+                
             elif elemento == "Evolución temporal de reservas":
                 fig3 = px.line(analisis_temporal_mdo, 
                                 x = "fecha_reserva",
@@ -137,8 +138,9 @@ if page == "Análisis general":
                                     title = "Ingresos por hotel",
                                     orientation = "h")
                 fig1.update_layout( width=100, 
-                        height=1000,
-                        title_x=0.2)
+                                    height=1000,
+                                    title_font_size = 15,
+                                    title_x=0.2)
                 fig1.update_xaxes(title=None)
                 fig1.update_yaxes(title=None)
                 st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
@@ -150,20 +152,22 @@ if page == "Análisis general":
                                     title = "Reservas por hotel",
                                     orientation = "h")
                 fig2.update_layout( width=100, 
-                        height=1000,
-                        title_x=0.2)
+                                    height=1000,
+                                    title_font_size = 15,
+                                    title_x=0.2)
                 fig2.update_xaxes(title=None)
                 fig2.update_yaxes(title=None)
                 st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
-            elif elemento2 == "Valoracion por hotel":
+            elif elemento2 == "Valoración por hotel":
                 fig3 = px.bar(ingresos_hotel_mdo, 
                                     x = "Valoracion media",
                                     y = "Hotel",
                                     title = "Valoración media por hotel",
                                     orientation = "h")
                 fig3.update_layout( width=800, 
-                        height=800,
-                        title_x=0.3)
+                                    height=800,
+                                    title_font_size = 15,
+                                    title_x=0.3)
                 fig3.update_xaxes(title=None)
                 fig3.update_yaxes(title=None)
                 st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
@@ -171,8 +175,6 @@ if page == "Análisis general":
 elif page == "Análisis de hoteles del grupo":
 
     st.markdown("""<h1 style =' text-align: center;font-size: 5em; color: white; font-family: "Times New Roman", Times, serif;'> Análisis de hoteles grupo </h1>""",unsafe_allow_html=True)
-
-    elemento_analisis = st.selectbox("Selecciona una métrica de evolución", ["Evolución temporal de reservas", "Evolución temporal de ingresos"])
     
     with st.container():
         col1, col2, col3, col4, col5 = st.columns(5) # esto me dividirá la página en 4 columnas
@@ -180,7 +182,12 @@ elif page == "Análisis de hoteles del grupo":
         col2.metric("Ingresos totales", f"{rec_total_grupo:,.2f}", delta = rec_total_grupo - rec_total_comp,border = True)
         col3.metric("Reservas totales", f"{reservas_tot_grupo:,.2f}", delta = round(reservas_tot_grupo - reservas_tot_comp, 2) ,border = True)
         col4.metric("Valoracion media", f"{v_media_grupo:,.2f}", delta = round(v_media_mdo- v_media_grupo, 2) ,border = True)
-        col5.metric("Ticket medio", f"{ticket_medio_grupo:,.2f}", delta = round(ticket_medio_mdo - ticket_medio_grupo, 2), border = True)
+        col5.metric("Ticket medio", f"{ticket_medio_grupo:,.2f}", delta = round(ticket_medio_grupo - ticket_medio_mdo , 2), border = True)
+
+    with st.container():
+        col1, col2 = st.columns([2,1])
+        with col2:
+            elemento_analisis = st.selectbox("Selecciona una métrica de evolución", ["Evolución temporal de reservas", "Evolución temporal de ingresos"])
 
     with st.container():
         col1, col2 = st.columns([1.5, 1.5])
@@ -191,12 +198,14 @@ elif page == "Análisis de hoteles del grupo":
                                 x = "Hotel",
                                 y = "Nº reservas",
                                 title = "Reservas por hotel")
+            fig2.update_layout(title_font_size = 15, title_x=0.3)
             st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
 
             fig3 = px.bar(ingresos_hoteles_grupo, 
                                 x = "Hotel",
                                 y = "Valoracion media",
                                 title = "Valoracion media por hotel")
+            fig3.update_layout(title_font_size = 15, title_x=0.3)
             st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
         with col2: 
@@ -206,8 +215,9 @@ elif page == "Análisis de hoteles del grupo":
                                 title = "Ingresos por hotel", 
                                 orientation= "h")
             fig1.update_layout( width=800, 
-                        height=800,
-                        title_x=0.3)
+                                height=800,
+                                title_font_size = 15,
+                                title_x=0.3)
             fig1.update_xaxes(title=None)
             fig1.update_yaxes(title=None)
             st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
@@ -219,6 +229,7 @@ elif page == "Análisis de hoteles del grupo":
                         x = "fecha_reserva",
                         y = "Ingresos",
                         title = "Evolución temporal de ingresos del grupo")
+        fig4.update_layout(title_font_size = 15, title_x=0.3)
         st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
 
     elif elemento_analisis == "Evolución temporal de reservas":
@@ -226,6 +237,7 @@ elif page == "Análisis de hoteles del grupo":
                         x = "fecha_reserva",
                         y = "Nº reservas",
                         title = "Evolución temporal de reservas del grupo")
+        fig5.update_layout(title_font_size = 15, title_x=0.3)
         st.plotly_chart(fig5, use_container_width = True) # método para que me muestre el gráfico
 
 elif page == "Análisis de hoteles de la competencia":
@@ -238,7 +250,7 @@ elif page == "Análisis de hoteles de la competencia":
         col2.metric("Ingresos totales", f"{rec_total_comp:,.2f}",delta = round(rec_total_comp - rec_total_grupo, 2), border = True)
         col3.metric("Valoracion media", f"{v_media_comp:,.2f}", delta = round(v_media_comp - v_media_mdo, 2), border = True)
         col4.metric("Reservas totales", f"{reservas_tot_comp:,.2f}",delta = round(reservas_tot_comp - reservas_tot_grupo, 2), border = True)
-        col5.metric("Ticket medio", f"{ticket_medio_comp:,.2f}", delta = round(ticket_medio_mdo - ticket_medio_comp,2), border = True)
+        col5.metric("Ticket medio", f"{ticket_medio_comp:,.2f}", delta = round(ticket_medio_comp-ticket_medio_mdo,2), border = True)
    
     with st.container():
 
@@ -251,12 +263,14 @@ elif page == "Análisis de hoteles de la competencia":
                                 x = "Hotel",
                                 y = "Ingresos",
                                 title = "Ingresos por hotel")
+            fig1.update_layout(title_font_size = 15, title_x=0.3)
             st.plotly_chart(fig1, use_container_width = True) # método para que me muestre el gráfico
 
             fig2 = px.bar(ingresos_hoteles_competencia, 
                                 x = "Hotel",
                                 y = "Nº reservas",
                                 title = "Reservas por hotel")
+            fig2.update_layout(title_font_size = 15, title_x=0.3)
             st.plotly_chart(fig2, use_container_width = True) # método para que me muestre el gráfico
 
         with col2:
@@ -264,9 +278,10 @@ elif page == "Análisis de hoteles de la competencia":
                                 x = "Hotel",
                                 y = "Valoracion media",
                                 title = "Valoración media por hotel")
+            fig3.update_layout(title_font_size = 15, title_x=0.3)
             st.plotly_chart(fig3, use_container_width = True) # método para que me muestre el gráfico
 
-            st.markdown('<font size="10">Todas las reservas de la competencia han sido realizadas el 21 de febrero</font>', unsafe_allow_html=True)
+            st.markdown('<font size="8">Todas las reservas de la competencia han sido realizadas el 21 de febrero</font>', unsafe_allow_html=True)
 
 elif page == "Análisis de clientes":
 
@@ -279,7 +294,10 @@ elif page == "Análisis de clientes":
         col3.metric("Reservas medias por cliente", f"{reserva_media_cliente:,.2f}", border = True)
         col4.metric("Tasa de repetición", f"{tasa_repeticion:,.2f}", border = True)
 
-    elemento = st.selectbox("Selecciona una métrica de análisis", ["Gasto por cliente", "Nº de reservas por cliente"])
+    with st.container():
+        col1, col2 = st.columns([2,1])
+        with col2:
+            elemento = st.selectbox("Selecciona una métrica de análisis", ["Gasto por cliente", "Nº de reservas por cliente"])
 
     with st.container():
         col1, col2 = st.columns([1.5, 1.5])
@@ -329,6 +347,7 @@ elif page == "Análisis de clientes":
                             orientation = "h")
                 fig3.update_layout( width=1000, 
                                     height=800,
+                                    title_font_size = 15,
                                     title_x=0.3)
                 
                 fig3.update_xaxes(title=None)
@@ -346,10 +365,7 @@ elif page == "Análisis de clientes":
                 fig4.update_layout( width=1000,  
                                     height=800,
                                     title_x=0.3,
-                                    font_family="Courier New",
-                                    font_color="blue",
-                                    title_font_family="Times New Roman",
-                                    legend_title_font_color="green")
+                                    title_font_size = 15)
                 fig4.update_xaxes(title=None)
                 fig4.update_yaxes(title=None)
                 st.plotly_chart(fig4, use_container_width = True) # método para que me muestre el gráfico
