@@ -181,7 +181,7 @@ elif page == "Análisis de hoteles del grupo":
         col1.metric("Nº Hoteles", f"{n_hoteles_grupo}", delta = n_hoteles_grupo-n_hoteles_comp ,border = True)
         col2.metric("Ingresos totales", f"{rec_total_grupo:,.2f}", delta = rec_total_grupo - rec_total_comp,border = True)
         col3.metric("Reservas totales", f"{reservas_tot_grupo:,.2f}", delta = round(reservas_tot_grupo - reservas_tot_comp, 2) ,border = True)
-        col4.metric("Valoracion media", f"{v_media_grupo:,.2f}", delta = round(v_media_mdo- v_media_grupo, 2) ,border = True)
+        col4.metric("Valoracion media", f"{v_media_grupo:,.2f}", delta = round(v_media_grupo - v_media_mdo, 2) ,border = True)
         col5.metric("Ticket medio", f"{ticket_medio_grupo:,.2f}", delta = round(ticket_medio_grupo - ticket_medio_mdo , 2), border = True)
 
     with st.container():
